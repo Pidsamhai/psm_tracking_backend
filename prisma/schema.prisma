@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+enum ProviderType {
+  GOOGLE
+  FACEBOOK
+  EMAIL
+}
+
+model Users {
+  id        String      @id @db.Char(36)
+  name      String?
+  email     String?     @unique
+  password  String?
+  providers Providers[]
+  createdAt DateTime    @default(now())
+  verified  Boolean     @default(true)
+}
+
+model Providers {
+  id         String       @id @db.Char(36)
+  name       ProviderType @default(EMAIL)
+  providerId String
+  userId     String       @db.Char(36)
+  User       Users        @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}

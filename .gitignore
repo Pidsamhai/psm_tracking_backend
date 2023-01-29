@@ -1,0 +1,8 @@
+node_modules
+*.lock
+*.log
+
+# Local Netlify folder
+.netlify
+netlify/edge-functions/__utils
+.env
